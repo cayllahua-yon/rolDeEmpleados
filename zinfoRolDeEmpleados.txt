@@ -1,0 +1,25 @@
+libs connvertir archivos html a pdf
+seeciones
+templates
+
+php.validate.executablePath
+logon
+cerrar sesion - Sign off sign out
+Puesto de trabajo - job Positions
+Empleados - staff
+usaurios - users 
+Enlistar informacion - index 
+
+luego añadios el CRUD  es el acrónimo de Create (Crear), Read (Leer), Update (Actualizar) y Delete (Borrar)
+---primera parte estructura-----luego deshabilitar--
+Bootstrap 5 Quick Snippet - Build Bootstrap UI in secs.
+PHP IntelliSense  ** no
+
+PHP Intelephense
+pHP server
+PHP getters and setters 
+ :: test unitario :: Better PHPUnit 
+ PHP Debug
+
+ HORA: 1:38
+ 
