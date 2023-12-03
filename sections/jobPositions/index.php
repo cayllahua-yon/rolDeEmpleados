@@ -1,3 +1,22 @@
+<?php
+    include("../../bd.php");
+
+    if (isset($_GET['valueID'])) {  //  MEJORAR ESTA AREA
+        $valueID = isset($_GET['valueID'])?$_GET['valueID']:"";
+        $queryDelete = $conexion->prepare("DELETE FROM job_position WHERE id=:id");
+        $queryDelete -> bindParam(":id", $valueID);
+        $queryDelete -> execute();
+        header("Location:index.php");
+    }
+
+    $queryNew = $conexion -> prepare("SELECT * FROM `job_position`");
+    $queryNew -> execute();
+    $response_all_job_position = $queryNew->fetchAll(PDO::FETCH_ASSOC); // para su uso en html
+    // print_r($response_all_job_position);
+
+    
+?>
+
 <?php include("../../templates/header.php"); ?>
 
 Listar puesto de trabajo
@@ -21,19 +40,24 @@ Listar puesto de trabajo
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="">
-                        <td scope="row">1</td>
-                        <td>Programador Jr</td>
+                    <?php  foreach ($response_all_job_position as $valorMostrar) {?>
+                        <tr class="">
+                        <td scope="row"><?php echo $valorMostrar["id"]; ?></td>
+                        <td><?php echo $valorMostrar["name_job_position"]; ?></td>
                         <td>
-                            <input name="btnEditar" id="btnEditar" class="btn btn-primary" type="button" value="Editar">
-                            <input name="btnEliminar" id="btnEliminar" class="btn btn-danger " type="button" value="Elimnar">
+                            
+                            <a name="btnEditar" id="btnEditar" class="btn btn-primary" href="updateJobPosition.php?valueID=<?php echo $valorMostrar["id"]; ?>" role="button">Editar</a>
+                            
+                            <a name="btnEliminar" id="btnEliminar" class="btn btn-danger" href="index.php?valueID=<?php echo $valorMostrar["id"]; ?>" role="button">Eliminar</a>
                         </td>
-                    </tr>
-                    <tr class="">
+                         </tr>
+                    <?php } ?>
+                    
+                    <!-- <tr class="">
                         <td scope="row">2</td>
                         <td>Item</td>
                         <td>Item</td>
-                    </tr>
+                    </tr> -->
                 </tbody>
             </table>
         </div>

@@ -1,3 +1,46 @@
+<?php
+    include("../../bd.php");
+
+    if($_POST){ // Mejorable las areas
+        // print_r($_POST);
+        // print_r($_FILES); 
+        $getPrimerNombre = (isset($_POST["primerNombre"])?$_POST["primerNombre"]:"");
+        $getSegunfoNombre = (isset($_POST["segundoNombre"])?$_POST["segundoNombre"]:"");
+        $getPrimerApellido = (isset($_POST["primerApellido"])?$_POST["primerApellido"]:"");
+        $getSegundoApellido = (isset($_POST["segundoApellido"])?$_POST["segundoApellido"]:"");
+
+        $getFoto = (isset($_FILES["foto"]["name"])?$_FILES["foto"]["name"]:"");
+        $getCV = (isset($_FILES["cv"]["name"])?$_FILES["cv"]["name"]:"");
+
+        $getPuesto = (isset($_POST["puesto"])?$_POST["puesto"]:"");
+        $getFecha = (isset($_POST["fechaIngreso"])?$_POST["fechaIngreso"]:"");
+       
+        $query_insert = $conexion -> prepare("INSERT INTO staff(id, first_name, second_name, first_surname, second_surname, photo, cv, id_job_position, admission_date) VALUES(null, :new_first_name, :new_second_name, :new_first_surname, :new_second_surname, :new_photo, :new_cv, :new_id_job_position, :new_admission_date)");
+        $query_insert -> bindParam(":new_first_name", $getPrimerNombre);
+        $query_insert -> bindParam(":new_second_name", $getSegunfoNombre);
+        $query_insert -> bindParam(":new_first_surname", $getPrimerApellido);
+        $query_insert -> bindParam(":new_second_surname", $getSegundoApellido);
+        
+        $fecha_foto = new DateTime(); // pra cambiar nombre
+
+
+        $query_insert -> bindParam(":new_photo", $getFoto);
+        $query_insert -> bindParam(":new_cv", $getCV);
+        
+        $query_insert -> bindParam(":new_id_job_position", $getPuesto);
+        $query_insert -> bindParam(":new_admission_date", $getFecha);
+        $query_insert -> execute();
+
+        header("Location:index.php");
+    }
+
+    // para la lista puesto de trabajo 
+    $queryNew = $conexion -> prepare("SELECT * FROM `job_position`");
+    $queryNew -> execute();
+    $response_all_job_position = $queryNew->fetchAll(PDO::FETCH_ASSOC); // para su uso en html
+?>
+
+
 <?php include("../../templates/header.php"); ?>
 
 Crear empreado
@@ -10,7 +53,7 @@ Crear empreado
 
         <div class="mb-3">
           <label for="primerNombre" class="form-label">Primer nombre</label>
-          <input type="text"
+          <input type="text" 
             class="form-control" name="primerNombre" id="primerNombre" aria-describedby="helpId" placeholder="Primer nombre">          
         </div>
         <div class="mb-3">
@@ -41,10 +84,10 @@ Crear empreado
         <div class="mb-3">
             <label for="puesto" class="form-label">Puesto:</label>
             <select class="form-select form-select-lg" name="puesto" id="puesto">
-                <option selected>Select one</option>
-                <option value="">New Delhi</option>
-                <option value="">Istanbul</option>
-                <option value="">Jakarta</option>
+              <?php foreach ($response_all_job_position as $valueJobPosition) { ?>
+                <option value="<?php echo $valueJobPosition["id"]; ?>"> <?php echo $valueJobPosition["name_job_position"];  ?></option>
+              <?php } ?>
+                
             </select>
         </div>
         <div class="mb-3">

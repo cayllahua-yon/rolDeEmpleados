@@ -1,5 +1,23 @@
-<?php include("../../templates/header.php"); ?>
+<?php
+    include("../../bd.php");
 
+    if (isset($_GET['valueID'])) {  //  MEJORAR ESTA AREA
+        $valueID = isset($_GET['valueID'])?$_GET['valueID']:"";
+        $queryDelete = $conexion->prepare("DELETE FROM user WHERE id=:id");
+        $queryDelete -> bindParam(":id", $valueID);
+        $queryDelete -> execute();
+        header("Location:index.php");
+    }
+
+    $queryNew = $conexion -> prepare("SELECT * FROM `user`");
+    $queryNew -> execute();
+    $response_all_users = $queryNew->fetchAll(PDO::FETCH_ASSOC); // para su uso en html
+    // print_r($response_all_users);
+
+    
+?>
+
+<?php include("../../templates/header.php"); ?>
 Listar Usuarios
 <br/ >
 
@@ -22,17 +40,21 @@ Listar Usuarios
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody> 
+                    <?php foreach ($response_all_users as $user) {?>
                     <tr class="">
-                        <td scope="row">1</td>
-                        <td>Yon cayllahua</td>
-                        <td>********</td>
-                        <td>yon@gmail.com</td>
+                        <td scope="row"><?php echo $user["id"]?></td>
+                        <td><?php echo $user["user_name"]?></td>
+                        <td>*********</td>
+                        <td><?php echo $user["user_correo"]?></td>
                         <td>
-                            <input name="btnEditar" id="btnEditar" class="btn btn-primary" type="button" value="Editar">
-                            <input name="btnEliminar" id="btnEliminar" class="btn btn-danger " type="button" value="Elimnar">
+                            <a name="btnEditar" id="btnEditar" class="btn btn-primary" href="updateUser.php?valueID=<?php echo $user["id"]; ?>" role="button">Editar</a>
+                            
+                            <a name="btnEliminar" id="btnEliminar" class="btn btn-danger" href="index.php?valueID=<?php echo $user["id"]; ?>" role="button">Eliminar</a>
+
                         </td>
                     </tr>
+                    <?php  } ?>
                 </tbody>
             </table>
         </div>

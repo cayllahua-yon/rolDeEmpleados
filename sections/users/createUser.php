@@ -1,3 +1,22 @@
+<?php
+    include("../../bd.php");
+    
+    if($_POST){ // Mejorable las areas
+        // print_r($_POST);
+        $newNombre = (isset($_POST["nombreUsuario"])?$_POST["nombreUsuario"]:"");
+        $newPassword = (isset($_POST["passwordUsuario"])?$_POST["passwordUsuario"]:"");
+        $newCorreo = (isset($_POST["correo"])?$_POST["correo"]:"");
+
+        $query_insert = $conexion -> prepare("INSERT INTO user (id, user_name, user_password, user_correo ) VALUES(NULL, :nombreUsuario, :passwordUsuario, :correo)");
+        $query_insert -> bindParam(":nombreUsuario", $newNombre);
+        $query_insert -> bindParam(":passwordUsuario", $newPassword);
+        $query_insert -> bindParam(":correo", $newCorreo);
+        $query_insert -> execute();
+
+        header("Location:index.php");
+     }
+?>
+
 <?php include("../../templates/header.php"); ?>
 <br/>
 

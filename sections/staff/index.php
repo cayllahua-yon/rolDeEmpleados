@@ -1,3 +1,23 @@
+<?php
+    include("../../bd.php");
+
+    // if (isset($_GET['valueID'])) {  //  MEJORAR ESTA AREA --ELIMINAR
+    //     $valueID = isset($_GET['valueID'])?$_GET['valueID']:"";
+        
+    //     $queryDelete = $conexion->prepare("DELETE FROM staff WHERE id=:id");
+    //     $queryDelete -> bindParam(":id", $valueID);
+    //     $queryDelete -> execute();
+    //     header("Location:index.php");
+    // }
+
+    $queryNew = $conexion -> prepare("SELECT *,(SELECT name_job_position FROM job_position WHERE job_position.id = staff.id limit 1) as position FROM `staff`");
+    $queryNew -> execute();
+    $response_all_staffs = $queryNew->fetchAll(PDO::FETCH_ASSOC); // para su uso en html
+    // print_r($response_all_staff);
+
+    
+?>
+
 <?php include("../../templates/header.php"); ?>
 
 <br/>
@@ -14,6 +34,7 @@
             <table class="table">
                 <thead>
                     <tr>
+                        <th scope="col">ID</th>
                         <th scope="col">Nombre</th>
                         <th scope="col">Foto</th>
                         <th scope="col">CV</th>
@@ -23,26 +44,23 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <?php foreach ($response_all_staffs as $valueStaff) { ?>
+                        
                     <tr class="">
-                        <td scope="row">Yon</td>
-                        <td>imagen.png</td>
-                        <td>cv.pdf</td>
-                        <td>Programador Junior</td>
-                        <td>12/12/2023</td>
+                        <td><?php echo $valueStaff["id"]; ?></td>
+                        <td scope="row"><?php echo $valueStaff["first_name"]." ".$valueStaff["second_name"]." ".$valueStaff["first_surname"]." ".$valueStaff["second_surname"];  ?></td>
+                        <td><?php echo $valueStaff["photo"]; ?></td>
+                        <td><?php echo $valueStaff["cv"]; ?></td>
+                        <td><?php echo $valueStaff["position"]; ?></td>
+                        <td><?php echo $valueStaff["admission_date"]; ?></td>
                         <td>
-                            <a name="" id="" class="btn btn-primary" href="#" role="button">Certificado</a>
-                            <a name="" id="" class="btn btn-success" href="#" role="button">Editar</a>
-                            <a name="" id="" class="btn btn-danger" href="#" role="button">Eliminar</a>
+                            <a name="btnCertificado" id="btnCertificado" class="btn btn-primary" href="certificado.php" role="button">Certificado</a>
+                            <a name="btnEditar" id="btnEditar" class="btn btn-success" href="updateStaff.php?valueID=<?php echo $valueStaff["id"]; ?>" role="button">Editar</a>
+                            <a name="btnEliminar" id="btnEliminar" class="btn btn-danger" href="index.php?valueID=<?php echo $valueStaff["id"]; ?>" role="button">Eliminar</a>
                         </td>
                     </tr>
-                    <tr class="">
-                    <td scope="row">Yon</td>
-                        <td>imagen.png</td>
-                        <td>cv.pdf</td>
-                        <td>Programador Junior</td>
-                        <td>12/12/2023</td>
-                        <td>Carta|Editar|Eliminar</td>
-                    </tr>
+                    <?php } ?> 
+                    
                 </tbody>
             </table>
         </div>
