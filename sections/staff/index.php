@@ -1,16 +1,32 @@
 <?php
     include("../../bd.php");
 
-    // if (isset($_GET['valueID'])) {  //  MEJORAR ESTA AREA --ELIMINAR
-    //     $valueID = isset($_GET['valueID'])?$_GET['valueID']:"";
-        
-    //     $queryDelete = $conexion->prepare("DELETE FROM staff WHERE id=:id");
-    //     $queryDelete -> bindParam(":id", $valueID);
-    //     $queryDelete -> execute();
-    //     header("Location:index.php");
-    // }
+    if (isset($_GET['valueID'])) {  //  MEJORAR ESTA AREA --ELIMINAR
+        $valueID = isset($_GET['valueID'])?$_GET['valueID']:"";
+        //buscamos el archivo relacionado con el empleado
+        $querySelect = $conexion -> prepare("SELECT photo,cv  FROM `staff` WHERE id=:id");
+        $querySelect -> bindParam(":id", $valueID);
+        $querySelect -> execute();
+        $response_photo_cv = $querySelect->fetch(PDO::FETCH_LAZY); 
 
-    $queryNew = $conexion -> prepare("SELECT *,(SELECT name_job_position FROM job_position WHERE job_position.id = staff.id limit 1) as position FROM `staff`");
+        if(isset($response_photo_cv['photo']) && $response_photo_cv['photo']!=""){
+            if (file_exists("./".$response_photo_cv["photo"])) {
+                unlink("./".$response_photo_cv["photo"]);
+            }
+        }
+        if(isset($response_photo_cv['cv']) && $response_photo_cv['cv']!=""){
+            if (file_exists("./".$response_photo_cv["cv"])) {
+                unlink("./".$response_photo_cv["cv"]);
+            }
+        }
+
+        $queryDelete = $conexion->prepare("DELETE FROM staff WHERE id=:id");
+        $queryDelete -> bindParam(":id", $valueID);
+        $queryDelete -> execute();
+        header("Location:index.php");
+    }
+
+    $queryNew = $conexion -> prepare("SELECT *, (SELECT name_job_position FROM job_position WHERE job_position.id = staff.id_job_position) as position FROM `staff`");
     $queryNew -> execute();
     $response_all_staffs = $queryNew->fetchAll(PDO::FETCH_ASSOC); // para su uso en html
     // print_r($response_all_staff);
@@ -49,7 +65,9 @@
                     <tr class="">
                         <td><?php echo $valueStaff["id"]; ?></td>
                         <td scope="row"><?php echo $valueStaff["first_name"]." ".$valueStaff["second_name"]." ".$valueStaff["first_surname"]." ".$valueStaff["second_surname"];  ?></td>
-                        <td><?php echo $valueStaff["photo"]; ?></td>
+                        <td>
+                            <img width="50" height="50" src=" <?php echo $valueStaff["photo"]; ?>" alt="" class="object-fit-cover border rounded">    
+                       </td>
                         <td><?php echo $valueStaff["cv"]; ?></td>
                         <td><?php echo $valueStaff["position"]; ?></td>
                         <td><?php echo $valueStaff["admission_date"]; ?></td>

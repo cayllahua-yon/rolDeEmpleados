@@ -21,12 +21,23 @@
         $query_insert -> bindParam(":new_first_surname", $getPrimerApellido);
         $query_insert -> bindParam(":new_second_surname", $getSegundoApellido);
         
-        $fecha_foto = new DateTime(); // pra cambiar nombre
+        //de damos un identificador unico para la foto por mas que sea la misma foto subida
+        $fecha_new = new DateTime(); // pra cambiar nombre
+        $nameFilePhoto = ($getFoto!="")?$fecha_new->getTimestamp()."_".$_FILES["foto"]["name"]:"";
+        $tmpPhoto = $_FILES["foto"]["tmp_name"];
+        if ($tmpPhoto!="") {
+          move_uploaded_file($tmpPhoto,"./".$nameFilePhoto);
+        }
+        $query_insert -> bindParam(":new_photo", $nameFilePhoto); // ahora le pasamos el nueva ruta completa
 
-
-        $query_insert -> bindParam(":new_photo", $getFoto);
-        $query_insert -> bindParam(":new_cv", $getCV);
-        
+        //para cv
+        $nameFileCV = ($getCV!="")?$fecha_new->getTimestamp()."_".$_FILES["cv"]["name"]:"";
+        $tmpCV = $_FILES["cv"]["tmp_name"];
+        if ($tmpCV!="") {
+          move_uploaded_file($tmpCV,"./".$nameFileCV);
+        }
+        $query_insert -> bindParam(":new_cv", $nameFileCV);
+                
         $query_insert -> bindParam(":new_id_job_position", $getPuesto);
         $query_insert -> bindParam(":new_admission_date", $getFecha);
         $query_insert -> execute();
