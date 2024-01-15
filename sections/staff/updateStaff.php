@@ -111,7 +111,9 @@ if ($_POST) { // si existe un envio- recepcionar esos datos
     // $query_insert -> bindParam(":new_photo", $getFoto);
     // $query_insert -> bindParam(":new_cv", $getCV);
     // $queryUpdate -> execute();
-    header("Location:index.php");
+    $mensaje="Registro actualizado";
+    header("Location:index.php?mensaje=".$mensaje);
+    // header("Location:index.php");
 }
 
     $queryNew = $conexion -> prepare("SELECT * FROM `job_position`");

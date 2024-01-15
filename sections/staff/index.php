@@ -23,7 +23,10 @@
         $queryDelete = $conexion->prepare("DELETE FROM staff WHERE id=:id");
         $queryDelete -> bindParam(":id", $valueID);
         $queryDelete -> execute();
-        header("Location:index.php");
+        
+        $mensaje="Registro eliminado";
+        header("Location:index.php?mensaje=".$mensaje);
+        // header("Location:index.php");
     }
 
     $queryNew = $conexion -> prepare("SELECT *, (SELECT name_job_position FROM job_position WHERE job_position.id = staff.id_job_position) as position FROM `staff`");
@@ -47,7 +50,7 @@
     <div class="card-body">
 
         <div class="table-responsive-sm">
-            <table class="table">
+            <table class="table" id="tabla_id">
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
@@ -67,14 +70,15 @@
                         <td scope="row"><?php echo $valueStaff["first_name"]." ".$valueStaff["second_name"]." ".$valueStaff["first_surname"]." ".$valueStaff["second_surname"];  ?></td>
                         <td>
                             <img width="50" height="50" src=" <?php echo $valueStaff["photo"]; ?>" alt="" class="object-fit-cover border rounded">    
-                       </td>
-                        <td><?php echo $valueStaff["cv"]; ?></td>
+                        </td>
+                        <td> <a href=" <?php echo $valueStaff["cv"]; ?>"  target="_blank">  <?php echo $valueStaff["cv"]; ?>  </a> </td>
                         <td><?php echo $valueStaff["position"]; ?></td>
                         <td><?php echo $valueStaff["admission_date"]; ?></td>
                         <td>
-                            <a name="btnCertificado" id="btnCertificado" class="btn btn-primary" href="certificado.php" role="button">Certificado</a>
+                            <a name="btnCertificado" id="btnCertificado" class="btn btn-primary" href="cartaRecomendacion.php?valueID=<?php echo $valueStaff["id"]; ?>" role="button" target="_blank">Certificado</a>
                             <a name="btnEditar" id="btnEditar" class="btn btn-success" href="updateStaff.php?valueID=<?php echo $valueStaff["id"]; ?>" role="button">Editar</a>
-                            <a name="btnEliminar" id="btnEliminar" class="btn btn-danger" href="index.php?valueID=<?php echo $valueStaff["id"]; ?>" role="button">Eliminar</a>
+                            <!-- <a name="btnEliminar" id="btnEliminar" class="btn btn-danger" href="index.php?valueID=<?php echo $valueStaff["id"]; ?>" role="button">Eliminar</a> -->
+                            <a name="btnEliminar" id="btnEliminar" class="btn btn-danger" href="javascript:borrar( <?php echo $valueStaff["id"]; ?> )" role="button">Eliminar</a>
                         </td>
                     </tr>
                     <?php } ?> 

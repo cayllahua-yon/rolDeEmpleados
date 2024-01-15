@@ -12,8 +12,9 @@
         $query_insert -> bindParam(":passwordUsuario", $newPassword);
         $query_insert -> bindParam(":correo", $newCorreo);
         $query_insert -> execute();
-
-        header("Location:index.php");
+        $mensaje="Registro agregado";
+        header("Location:index.php?mensaje=".$mensaje);
+        //header("Location:index.php");
      }
 ?>
 

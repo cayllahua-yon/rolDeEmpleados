@@ -20,7 +20,10 @@ if ($_POST) { // si existe un envio- recepcionar esos datos
     $queryUpdate -> bindParam(":nombreDelPuesto",$newValueName);
     $queryUpdate -> bindParam(":valueID",$newValueID);
     $queryUpdate -> execute();
-    header("Location:index.php");
+
+    $mensaje="Registro actualizado";
+    header("Location:index.php?mensaje=".$mensaje);
+
 }
 
 ?>

@@ -1,12 +1,14 @@
 <?php
     include("../../bd.php");
-
+    
     if (isset($_GET['valueID'])) {  //  MEJORAR ESTA AREA
         $valueID = isset($_GET['valueID'])?$_GET['valueID']:"";
         $queryDelete = $conexion->prepare("DELETE FROM user WHERE id=:id");
         $queryDelete -> bindParam(":id", $valueID);
         $queryDelete -> execute();
-        header("Location:index.php");
+        //header("Location:index.php");
+        $mensaje="Registro eliminado";
+        header("Location:index.php?mensaje=".$mensaje);
     }
 
     $queryNew = $conexion -> prepare("SELECT * FROM `user`");
@@ -30,7 +32,7 @@ Listar Usuarios
     </div>
     <div class="card-body">
         <div class="table-responsive-sm">
-            <table class="table table">
+            <table class="table table"  id="tabla_id">
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
@@ -50,7 +52,7 @@ Listar Usuarios
                         <td>
                             <a name="btnEditar" id="btnEditar" class="btn btn-primary" href="updateUser.php?valueID=<?php echo $user["id"]; ?>" role="button">Editar</a>
                             
-                            <a name="btnEliminar" id="btnEliminar" class="btn btn-danger" href="index.php?valueID=<?php echo $user["id"]; ?>" role="button">Eliminar</a>
+                            <a name="btnEliminar" id="btnEliminar" class="btn btn-danger" href="javascript:borrar( <?php echo $user["id"]; ?> )" role="button">Eliminar</a>
 
                         </td>
                     </tr>

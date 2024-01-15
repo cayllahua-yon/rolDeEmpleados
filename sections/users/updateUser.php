@@ -27,7 +27,10 @@ if ($_POST) { // si existe un envio- recepcionar esos datos
     $queryUpdate -> bindParam(":emailUser",$newValueCorreo);
     $queryUpdate -> bindParam(":valueID",$newValueID);
     $queryUpdate -> execute();
-    header("Location:index.php");
+    
+    $mensaje="Registro actualizado";
+    header("Location:index.php?mensaje=".$mensaje);
+   // header("Location:index.php");
 }
 
 ?>

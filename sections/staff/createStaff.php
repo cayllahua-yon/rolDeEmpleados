@@ -42,7 +42,9 @@
         $query_insert -> bindParam(":new_admission_date", $getFecha);
         $query_insert -> execute();
 
-        header("Location:index.php");
+        $mensaje="Registro agregado";
+        header("Location:index.php?mensaje=".$mensaje);
+        // header("Location:index.php");
     }
 
     // para la lista puesto de trabajo 

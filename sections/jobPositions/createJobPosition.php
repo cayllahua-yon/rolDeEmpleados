@@ -9,8 +9,8 @@
         $query_insert = $conexion -> prepare("INSERT INTO job_position(id, name_job_position) VALUES(null, :nombreDelPuesto)");
         $query_insert -> bindParam(":nombreDelPuesto",$nombreDelPuesto);
         $query_insert -> execute();
-
-        header("Location:index.php");
+        $mensaje="Registro agregado";
+        header("Location:index.php?mensaje=".$mensaje);
     }
 ?>
 

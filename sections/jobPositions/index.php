@@ -6,15 +6,15 @@
         $queryDelete = $conexion->prepare("DELETE FROM job_position WHERE id=:id");
         $queryDelete -> bindParam(":id", $valueID);
         $queryDelete -> execute();
-        header("Location:index.php");
+
+        $mensaje="Registro eliminado";//añadimos el mensaje en la redireccion
+        header("Location:index.php?mensaje=".$mensaje);
     }
 
     $queryNew = $conexion -> prepare("SELECT * FROM `job_position`");
     $queryNew -> execute();
     $response_all_job_position = $queryNew->fetchAll(PDO::FETCH_ASSOC); // para su uso en html
-    // print_r($response_all_job_position);
-
-    
+    // print_r($response_all_job_position);    
 ?>
 
 <?php include("../../templates/header.php"); ?>
@@ -31,7 +31,8 @@ Listar puesto de trabajo
     </div>
     <div class="card-body">
         <div class="table-responsive-sm">
-            <table class="table table">
+                <thead>
+            <table class="table table"  id="tabla_id">
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
@@ -48,7 +49,8 @@ Listar puesto de trabajo
                             
                             <a name="btnEditar" id="btnEditar" class="btn btn-primary" href="updateJobPosition.php?valueID=<?php echo $valorMostrar["id"]; ?>" role="button">Editar</a>
                             
-                            <a name="btnEliminar" id="btnEliminar" class="btn btn-danger" href="index.php?valueID=<?php echo $valorMostrar["id"]; ?>" role="button">Eliminar</a>
+                            <a name="btnEliminar" id="btnEliminar" class="btn btn-danger" href="javascript:borrar( <?php echo $valorMostrar["id"];?> )" role="button">Eliminar</a>
+                          <!-- index.php?valueID= -->
                         </td>
                          </tr>
                     <?php } ?>
